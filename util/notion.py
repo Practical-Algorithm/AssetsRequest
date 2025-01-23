@@ -1,12 +1,8 @@
-import os
-import load_dotenv
 from notion_client import Client, APIErrorCode, APIResponseError
 import json
-import logging
+from notion2md.exporter.block import MarkdownExporter, StringExporter
+from bot_config import NOTION_API_KEY, NOTION_DATABASE_ID
 
-load_dotenv.load_dotenv() # Load environment variables from .env file
-NOTION_API_KEY = os.getenv('NOTION_API_KEY')
-NOTION_DATABASE_ID = os.getenv('NOTION_DATABASE_ID')
 notion = Client(auth=NOTION_API_KEY)
 # notion = Client(auth=NOTION_API_KEY, log_level=logging.DEBUG)
 
@@ -24,32 +20,17 @@ def extract_notion_data(obj: dict) -> dict:
     "title": title,
     "status": status or "Not Started"
   }
-
-# def extract_notion_page_data(obj: dict) -> dict:
-
-
 def get_posts(limit: int = 10):
   posts = notion.databases.query(database_id=NOTION_DATABASE_ID)
   posts = json.loads(json.dumps(posts))
-  posts = posts['results']
+  posts = posts["results"]
 
   return [extract_notion_data(post) for post in posts]
 
-def read_page(page_id: str):
-  page = notion.blocks.children.list(block_id=page_id)
-
+def read_page(page_id: str) -> str:
+  page = StringExporter(block_id=page_id, token=NOTION_API_KEY).export()
   return page
 
-# def change_page_status(page_id: str, new_status: str):
-#   page = notion.pages.update(
-#     page_id=page_id,
-#     properties={
-#       "Status": {
-#         "select": {
-#           "name": new_status
-#         }
-#       }
-#     }
-#   )
-
-#   return page
+def extract_photo_request(page: str) -> list[str]:
+  photo_request = [line for line in page.split('\n') if '—' in line]
+  return photo_request
