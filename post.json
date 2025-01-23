@@ -1,0 +1,98 @@
+{
+  "object": "page",
+  "id": "1789a6f3-1b84-80cc-873a-f10908d730f6",
+  "created_time": "2025-01-11T14: 31: 00.000Z",
+  "last_edited_time": "2025-01-19T16: 03: 00.000Z",
+  "created_by": {
+    "object": "user",
+    "id": "eaa09669-4cae-4e73-a241-7fc7af78eaff"
+  },
+  "last_edited_by": {
+    "object": "user",
+    "id": "eaa09669-4cae-4e73-a241-7fc7af78eaff"
+  },
+  "cover": None,
+  "icon": None,
+  "parent": {
+    "type": "database_id",
+    "database_id": "b503962b-c98f-426e-8e13-4040306a6f2f"
+  },
+  "archived": False,
+  "in_trash": False,
+  "properties": {
+    "isThisMonth": {
+      "id": "ObX~",
+      "type": "formula",
+      "formula": {
+        "type": "string",
+        "string": None
+      }
+    },
+    "Live Month": {
+      "id": "af%3B%3B",
+      "type": "formula",
+      "formula": {
+        "type": "string",
+        "string": None
+      }
+    },
+    "Pillar": {
+      "id": "nsYl",
+      "type": "rollup",
+      "rollup": {
+        "type": "array",
+        "array": [],
+        "function": "show_original"
+      }
+    },
+    "(formula) isNextMonth": {
+      "id": "pMW%3F",
+      "type": "formula",
+      "formula": {
+        "type": "string",
+        "string": None
+      }
+    },
+    "Status": {
+      "id": "vJZ%5B",
+      "type": "select",
+      "select": None
+    },
+    "🎦 Pillar": {
+      "id": "wCaa",
+      "type": "relation",
+      "relation": [],
+      "has_more": False
+    },
+    "Live Date": {
+      "id": "%7CnnK",
+      "type": "date",
+      "date": None
+    },
+    "Title": {
+      "id": "title",
+      "type": "title",
+      "title": [
+        {
+          "type": "text",
+          "text": {
+            "content": "DP: Recurrence Relation",
+            "link": None
+          },
+          "annotations": {
+            "bold": False,
+            "italic": False,
+            "strikethrough": False,
+            "underline": False,
+            "code": False,
+            "color": "default"
+          },
+          "plain_text": "DP: Recurrence Relation",
+          "href": None
+        }
+      ]
+    }
+  },
+  "url": "https: //www.notion.so/DP-Recurrence-Relation-1789a6f31b8480cc873af10908d730f6",
+  "public_url": None
+}
