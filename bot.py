@@ -5,6 +5,8 @@ class NotionBot(commands.Bot):
     async def on_message(self, message):
         # if message.channel.id != int(bot_config.CHANNEL_ID):
         #   return
+        if message.author.bot:
+            return
         print(f"Message from {message.author}: {message.content}")
         await self.process_commands(message)
 

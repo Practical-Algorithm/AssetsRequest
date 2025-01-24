@@ -1,0 +1,1 @@
+npx nodemon --exec "python main.py" --ext py
