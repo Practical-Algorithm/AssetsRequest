@@ -12,3 +12,9 @@ reaction_map = {
 
 # labels = [acknowledge, complete, defer]
 labels = reaction_map.values()
+
+flags = {
+    "acknowledge": 1,
+    "complete": 2,
+    "defer": 4
+}

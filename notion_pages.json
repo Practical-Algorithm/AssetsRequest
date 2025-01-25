@@ -1,7 +1,7 @@
 {
     "1019a6f3-1b84-801a-b5b4-d162ce3dcfbd": {
-        "acknowledge": false,
-        "complete": false,
+        "acknowledge": true,
+        "complete": true,
         "defer": false
     }
 }

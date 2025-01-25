@@ -37,6 +37,9 @@ class NotionPageTracker:
                 self.pages[post_id][key] = value
         
         self.save_database()
+    
+    def has_page(self, post_id):
+        return post_id in self.pages
 
     def get_page(self, post_id):
         return self.pages.get(post_id)

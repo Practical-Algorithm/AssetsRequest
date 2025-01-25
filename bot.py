@@ -3,6 +3,8 @@ import bot_config
 import discord
 import util.discord_label as label
 import util.notion_pagetracker as tracker
+import logic.notion as notion_logic
+import datetime
 
 class NotionBot(commands.Bot):
     async def on_message(self, message):
@@ -20,6 +22,7 @@ class NotionBot(commands.Bot):
         channel = self.get_channel(channel_id)
         
         print(f"Channel: {channel}")
+        # Check existing requests
         if channel:
             try:
                 # Fetch recent messages (adjust limit as needed)
@@ -40,12 +43,28 @@ class NotionBot(commands.Bot):
                         if label.reaction_map.get(reaction.emoji):
                             updated_track[label.reaction_map.get(reaction.emoji)] = reaction.count > 1
                     
+                    print(f"Page ID: {page_id}, Updated track: {updated_track}")
                     tracker.post_tracker.update_page(page_id, **updated_track)
+                    new_track = tracker.post_tracker.get_page(page_id)
+                    await notion_logic.read_tracker(page_id, channel, **new_track)
+
+
+                    # if the message is 7 days old, delete it
+                    if message.created_at < discord.utils.utcnow() - datetime.timedelta(days=7):
+                        if new_track.get('completed', False):
+                            await message.delete()
+
 
             except discord.errors.Forbidden:
                 print("No permission to read message history")
             except Exception as e:
                 print(f"Error checking messages: {e}")
+
+        # Check for new requests
+        newposts = await notion_logic.find_requesting_asset_posts()
+        for post in newposts:
+            if not tracker.post_tracker.has_page(post['id']):
+                await notion_logic.send_photo_request(channel, post)
 
     async def setup_hook(self):
         await self.load_extension('cogs.notion_commands')

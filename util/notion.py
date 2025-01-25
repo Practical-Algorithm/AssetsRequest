@@ -90,6 +90,4 @@ class Notion():
     MarkdownExporter(block_id=page_id, token=self.token).export(filename=filename)
 
 
-
 NotionClient = Notion(token=bot_config.NOTION_TOKEN, database_id=bot_config.DATABASE_ID)
-

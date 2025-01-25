@@ -2,7 +2,7 @@ import discord
 from util.notion import NotionClient
 import util.discord_label as label
 import util.notion_pagetracker as tracker
-
+import bot_config
 
 async def send_photo_request(ctx, post):
   page_id = post['id']
@@ -46,10 +46,36 @@ async def send_photo_request(ctx, post):
   tracker.post_tracker.add_page(page_id)
 
 
-async def find_requesting_asset_posts(ctx):
+async def find_requesting_asset_posts():
   posts = NotionClient.get_requesting_posts()
-  if len(posts) == 0:
-      await ctx.send("No posts found")
-      return
-  for post in posts:
-      await send_photo_request(ctx, post)
+  return posts
+
+def mark_as_acknowledged(page_id):
+  tracker.post_tracker.update_page(page_id, acknowledged=True)
+  NotionClient.mark_as_acknowledged(page_id)
+
+def mark_as_complete(page_id):
+    tracker.post_tracker.update_page(page_id, completed=True)
+    NotionClient.mark_as_complete(page_id)
+
+async def mark_as_deferred(page_id, ctx = None):
+    tracker.post_tracker.update_page(page_id, deferred=True)
+    NotionClient.mark_as_acknowledged(page_id)
+    if ctx:
+        await ctx.send(f"<@{bot_config.DISCORD_ADMIN_ID}> deal with this")
+
+async def read_tracker(page_id, ctx, **kwargs):
+    flag = 0
+    for key, value in kwargs.items():
+        if key in label.labels:
+            if value:
+                flag |= label.flags[key]
+    # print(f"Flag: {flag}")
+
+    if flag & label.flags['complete']:
+        mark_as_complete(page_id)
+    elif flag & label.flags['deferred']:
+        await mark_as_deferred(page_id, ctx)
+    elif flag & label.flags['acknowledged']:
+        mark_as_acknowledged(page_id)
+    
