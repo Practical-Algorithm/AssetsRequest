@@ -1,61 +1,17 @@
-import discord
 from discord.ext import commands
 import bot_config
-from util.notion import Notion
+from util.notion import NotionClient
+import util.discord_label as label
+import logic.notion as notion_logic
 
 class NotionCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.notion = Notion(token=bot_config.NOTION_TOKEN, database_id=bot_config.DATABASE_ID)
-
-    async def send_photo_request(self, ctx, post):
-        page_id = post['id']
-        page_title = post['title']
-
-        print("Sending photo request for post: ", post['title'])
-        page, error = self.notion.read_page(page_id)
-
-        photo_request = None
-        if error:
-            photo_request = ["Error reading page, please manually check the page"]                
-        else:
-            photo_request = self.notion.extract_photo_request(page)
-
-        if len(photo_request) == 0:
-            self.notion.mark_as_complete(page_id)
-            return
-        
-        # convert list to numbered list in markdown
-        photo_request = [f"{i+1}. {line}" for i, line in enumerate(photo_request)]
-
-        photo_request = '\n'.join(photo_request)
-        # escape markdown formatting
-        photo_request = photo_request.replace('*', '\*')
-        photo_request = photo_request.replace('_', '\_')
-        photo_request = photo_request.replace('~', '\~')
-        photo_request = photo_request.replace('`', '\`')
-        photo_request = photo_request.replace('|', '\|')
-
-        photo_request += f"\n\n[Link to Notion page]({post['link']})"
-
-
-        embed = discord.Embed(title=f"New photo request from \"{page_title}\"", color=0x2D6C1E, description=photo_request)
-        embed.set_footer(text=f"metadata: {page_id}")
-
-        message = await ctx.send(embed=embed)
-        await message.add_reaction('👌')  # ok hand emoji
-        await message.add_reaction('☺️')  # relaxed
-        await message.add_reaction('📲')
-
 
     @commands.command(name='check')
-    async def find_requesting_asset_posts(self, ctx):
-        posts = self.notion.get_requesting_posts()
-        if len(posts) == 0:
-            await ctx.send("No posts found")
-            return
-        for post in posts:
-            await self.send_photo_request(ctx, post)
+    async def manual_check(self, ctx):
+        print("Checking for new requests")
+        await notion_logic.find_requesting_asset_posts(ctx)
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
@@ -72,16 +28,16 @@ class NotionCommands(commands.Cog):
                 page_id = footer_text.split(':')[1].strip()
 
         if page_id:
-            if reaction.emoji == '👌':
+            if reaction.emoji == label.acknowledge:
                 """Content team has acknowledged the request"""
                 print(f"Ack Page ID: \'{page_id}\'")
-                self.notion.mark_as_acknowledged(page_id)
-            elif reaction.emoji == '☺️':
+                NotionClient.mark_as_acknowledged(page_id)
+            elif reaction.emoji == label.complete:
                 """Mark the note as complete"""
                 print(f"com Page ID: \'{page_id}\'")
 
-                self.notion.mark_as_complete(page_id)
-            elif reaction.emoji == '📲':
+                NotionClient.mark_as_complete(page_id)
+            elif reaction.emoji == label.defer:
                 """Contact @Phon1209 to add more components instead"""
                 await reaction.message.channel.send(f"<@{bot_config.DISCORD_ADMIN_ID}> deal with this")
 

@@ -1,6 +1,7 @@
 from notion_client import Client
 import json
 from notion2md.exporter.block import MarkdownExporter, StringExporter
+import bot_config
 
 class Notion():
   def __init__(self, token, database_id) -> None:
@@ -87,3 +88,8 @@ class Notion():
 
   def export_page(self, page_id: str, filename: str):
     MarkdownExporter(block_id=page_id, token=self.token).export(filename=filename)
+
+
+
+NotionClient = Notion(token=bot_config.NOTION_TOKEN, database_id=bot_config.DATABASE_ID)
+
