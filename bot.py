@@ -63,8 +63,7 @@ class NotionBot(commands.Bot):
         # Check for new requests
         newposts = await notion_logic.find_requesting_asset_posts()
         for post in newposts:
-            if not tracker.post_tracker.has_page(post['id']):
-                await notion_logic.send_photo_request(channel, post)
+            await notion_logic.send_photo_request(channel, post)
 
     async def setup_hook(self):
         await self.load_extension('cogs.notion_commands')

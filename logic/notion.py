@@ -5,6 +5,10 @@ import util.notion_pagetracker as tracker
 import bot_config
 
 async def send_photo_request(ctx, post):
+  
+  if tracker.post_tracker.has_page(post['id']):
+    return
+      
   page_id = post['id']
   page_title = post['title']
 
