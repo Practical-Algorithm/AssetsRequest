@@ -65,8 +65,10 @@ def mark_as_complete(page_id):
 async def mark_as_deferred(page_id, ctx = None):
     tracker.post_tracker.update_page(page_id, deferred=True)
     NotionClient.mark_as_acknowledged(page_id)
-    if ctx:
+
+    if not tracker.post_tracker.has_call_admin(page_id) and ctx:
         await ctx.send(f"<@{bot_config.DISCORD_ADMIN_ID}> deal with this")
+        tracker.post_tracker.set_call_admin(page_id)
 
 async def read_tracker(page_id, ctx, **kwargs):
     flag = 0

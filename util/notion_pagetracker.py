@@ -46,5 +46,18 @@ class NotionPageTracker:
 
     def list_pages(self):
         return self.pages
+    
+    def has_call_admin(self, post_id):
+        if post_id not in self.pages:
+            raise KeyError(f"Page {post_id} not found")
+        return self.pages[post_id].get('has_call_admin', False)
+
+    def set_call_admin(self, post_id):
+        if post_id not in self.pages:
+            raise KeyError(f"Page {post_id} not found")
+        self.pages[post_id]['has_call_admin'] = True
+        self.save_database()
+
+            
 
 post_tracker = NotionPageTracker()
