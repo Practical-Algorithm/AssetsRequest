@@ -33,6 +33,7 @@ class NotionCommands(commands.Cog):
             if footer_text.startswith('metadata:'):
                 page_id = footer_text.split(':')[1].strip()
 
+        ctx = reaction.message.channel
         if page_id:
             if reaction.emoji == label.acknowledge:
                 """Content team has acknowledged the request"""

@@ -28,6 +28,9 @@ class NotionBot(commands.Bot):
                 # Fetch recent messages (adjust limit as needed)
                 async for message in channel.history(limit=100):
                     if not message.author.id == self.user.id:
+                        # delete the command message
+                        if message.content.startswith('!'):
+                            await message.delete()
                         continue
                     if not message.embeds:
                         continue

@@ -74,12 +74,12 @@ async def read_tracker(page_id, ctx, **kwargs):
         if key in label.labels:
             if value:
                 flag |= label.flags[key]
-    # print(f"Flag: {flag}")
+    print(f"Flag: {flag}")
 
     if flag & label.flags['complete']:
         mark_as_complete(page_id)
-    elif flag & label.flags['deferred']:
+    elif flag & label.flags['defer']:
         await mark_as_deferred(page_id, ctx)
-    elif flag & label.flags['acknowledged']:
+    elif flag & label.flags['acknowledge']:
         mark_as_acknowledged(page_id)
     
