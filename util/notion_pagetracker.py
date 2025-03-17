@@ -30,7 +30,7 @@ class NotionPageTracker:
 
     def update_page(self, post_id, **kwargs):
         if post_id not in self.pages:
-            raise KeyError(f"Page {post_id} not found")
+            raise KeyError(f"Update Page: Page {post_id} not found")
         
         for key, value in kwargs.items():
             if key in label.labels:
@@ -49,12 +49,12 @@ class NotionPageTracker:
     
     def has_call_admin(self, post_id):
         if post_id not in self.pages:
-            raise KeyError(f"Page {post_id} not found")
+            raise KeyError(f"Has Call Admin: Page {post_id} not found")
         return self.pages[post_id].get('has_call_admin', False)
 
     def set_call_admin(self, post_id):
         if post_id not in self.pages:
-            raise KeyError(f"Page {post_id} not found")
+            raise KeyError(f"Set Call Admin: Page {post_id} not found")
         self.pages[post_id]['has_call_admin'] = True
         self.save_database()
 

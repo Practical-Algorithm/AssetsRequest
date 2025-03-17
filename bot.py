@@ -54,7 +54,8 @@ class NotionBot(commands.Bot):
 
                     # if the message is 7 days old, delete it
                     if message.created_at < discord.utils.utcnow() - datetime.timedelta(days=7):
-                        if new_track.get('completed', False):
+                        if new_track.get('complete', False):
+                            print(f"Deleting message {message.id}")
                             await message.delete()
 
 
