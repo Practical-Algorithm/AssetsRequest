@@ -37,7 +37,27 @@
     },
     "1f59a6f3-1b84-801a-99e2-d61f7c2530ba": {
         "acknowledge": false,
+        "complete": true,
+        "defer": false
+    },
+    "20b9a6f3-1b84-80fd-aa47-f474f00f19eb": {
+        "acknowledge": false,
+        "complete": true,
+        "defer": false
+    },
+    "2219a6f3-1b84-80e5-bb28-ed257f814f39": {
+        "acknowledge": false,
         "complete": false,
+        "defer": false
+    },
+    "2219a6f3-1b84-80df-9871-f882686e3dcd": {
+        "acknowledge": false,
+        "complete": false,
+        "defer": false
+    },
+    "1879a6f3-1b84-8074-bb2c-e18d6bf73a74": {
+        "acknowledge": true,
+        "complete": true,
         "defer": false
     }
 }
